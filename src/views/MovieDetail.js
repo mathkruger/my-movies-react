@@ -23,6 +23,7 @@ export function MovieDetail() {
             <img alt={movie.title} src={`https://image.tmdb.org/t/p/w300/${movie.poster_path}`} />
 
             <ul>
+                <li>Release date: {movie.release_date}</li>
                 <li>Score: {movie.vote_average}</li>
                 <li>Genres: { movie.genres?.map(x => x.name).join(", ") }</li>
             </ul>

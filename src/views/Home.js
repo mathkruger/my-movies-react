@@ -1,22 +1,36 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { MoviesService } from "../api/MoviesService";
 import { MoviesList } from "../components/MoviesList";
-import { MoviesContainer } from "../styles/MoviesContainer";
+import { Pagination } from "../components/Pagination";
+import { CardContainer } from "../styles/CardContainer";
 
 export function Home() {
     const [movies, setMovies] = useState([]);
-    const fetchMovies = async () => {
-      const { data } = await MoviesService.getMovies();
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const fetchMovies = async (page) => {
+      const { data } = await MoviesService.getMovies(page);
+
       setMovies(data.results);
     };
   
-    useEffect(() => {
-      fetchMovies();
-    }, []);
+    useMemo(() => {
+      fetchMovies(currentPage);
+    }, [currentPage]);
 
     return (
-        <MoviesContainer>
-            <MoviesList movies={movies} />
-        </MoviesContainer>
+        <>
+            <h1>Home</h1>
+
+            <CardContainer>
+                <MoviesList movies={movies} />
+            </CardContainer>
+
+            <Pagination
+              pageSize={20}
+              currentPage={currentPage}
+              totalCount={500 * 20}
+              onPageChange={page => setCurrentPage(page)} />
+        </>
     );
 }
